@@ -1,9 +1,10 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+import visualizer
 
 
-def train(dataloader: DataLoader, model: nn.Module, loss_fn, optimizer, device="cpu"):
+def train(dataloader: DataLoader, model: nn.Module, loss_fn, optimizer, epoch, device="cpu"):
     size = len(dataloader.dataset)
     model.train()
     for batch, (X,y) in enumerate(dataloader):
@@ -19,6 +20,10 @@ def train(dataloader: DataLoader, model: nn.Module, loss_fn, optimizer, device="
         if batch % 100 == 0:
             loss, current = loss.item(), (batch+1) * len(X)
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+
+            visualizer.writer.add_scalar(f"training loss {model.__class__.__name__}", loss, epoch * len(dataloader) + batch)
+            visualizer.writer.add_figure("Predictions vs. actuals", visualizer.plot_classes_preds(model, X, y),
+                                         global_step=epoch * len(dataloader) + batch)
 
 
 def test(dataloader: DataLoader, model: nn.Module, loss_fn, device="cpu"):

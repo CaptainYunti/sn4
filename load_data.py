@@ -3,7 +3,7 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 
 
-tranform = (
+tranform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((.5, .5, .5),(.5, .5, .5))]
 )
