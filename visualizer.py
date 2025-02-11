@@ -10,7 +10,7 @@ import torch.nn.functional as F
 
 images = None
 
-writer = SummaryWriter("runs/cifar_experiment_1")
+writer = SummaryWriter("runs/cifar_experiment_3")
 
 # constant for classes
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer',
@@ -43,7 +43,7 @@ def show_images(trainloader):
     matplotlib_imshow(img_grid, one_channel=True)
 
     # write to tensorboard
-    writer.add_image('four_fashion_mnist_images', img_grid)
+    writer.add_image('CIFAR10 Images', img_grid)
 
 
 def graph(net, device):

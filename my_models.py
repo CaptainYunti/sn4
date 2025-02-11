@@ -95,3 +95,83 @@ class LeNetPadding(nn.Module):
 
     def forward(self, x):
         return self.training_stack(x)
+
+
+class LeBigNet(nn.Module):
+    def __init__(self):
+        super.__init__()
+
+        # input = 32x32x3
+        self.first_conv = nn.Sequential(
+            nn.Conv2d(3, 32, 3, padding="same"),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout2d(0.3)
+        )
+
+        # input = 32x32x32
+        self.second_conv = nn.Sequential(
+            nn.Conv2d(32, 32, 3, padding="same"),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout2d(0.3),
+            nn.MaxPool2d(2)
+        )
+
+        # input = 16x16x32
+        self.third_conv = nn.Sequential(
+            nn.Conv2d(32, 64, 3, padding="same"),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout2d(0.3),
+        )
+
+        # input = 16x16x64
+        self.fourth_conv = nn.Sequential(
+            nn.Conv2d(64, 64, 3, padding="same"),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout2d(0.3),
+            nn.MaxPool2d(2),
+        )
+
+        # input = 8x8x64
+        self.fifth_conv = nn.Sequential(
+            nn.Conv2d(64, 128, 3, padding="same"),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout2d(0.3),
+        )
+
+        # input = 8x8x128
+        self.sixth_conv = nn.Sequential(
+            nn.Conv2d(128, 128, 3, padding="same"),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout2d(0.3),
+            nn.MaxPool2d(2),
+        )
+
+        # input = 4*4*128 (2^11)
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(2048, 128),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+
+            nn.Linear(128, 128),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+
+            nn.Linear(128, 10)
+        )
+
+    def forward(self, x):
+        x = self.first_conv(x)
+        x = self.second_conv(x)
+        x = self.third_conv(x)
+        x = self.fourth_conv(x)
+        x = self.fifth_conv(x)
+        x = self.sixth_conv(x)
+        x = nn.Flatten(x)
+        x = self.linear_relu_stack(x)
+        return x

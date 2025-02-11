@@ -26,7 +26,7 @@ def train(dataloader: DataLoader, model: nn.Module, loss_fn, optimizer, epoch, d
                                          global_step=epoch * len(dataloader) + batch)
 
 
-def test(dataloader: DataLoader, model: nn.Module, loss_fn, device="cpu"):
+def test(dataloader: DataLoader, model: nn.Module, loss_fn, epoch, device="cpu"):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     model.eval()
@@ -44,6 +44,7 @@ def test(dataloader: DataLoader, model: nn.Module, loss_fn, device="cpu"):
     correct /= size
 
     print(f"Test Error: \n Accuracy: {100*correct:>0.2f}%, AVG loss: {test_loss:>8f} \n")
+    visualizer.writer.add_scalar(f"test accuracy {model.__class__.__name__}", correct*100, epoch+1)
 
     return correct, test_loss
 
