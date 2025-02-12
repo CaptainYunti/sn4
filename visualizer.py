@@ -10,7 +10,7 @@ import torch.nn.functional as F
 
 images = None
 
-writer = SummaryWriter("runs/cifar_experiment_3")
+writer = SummaryWriter("runs/cifar_experiment_4")
 
 # constant for classes
 classes = ('airplane', 'automobile', 'bird', 'cat', 'deer',

@@ -99,7 +99,7 @@ class LeNetPadding(nn.Module):
 
 class LeBigNet(nn.Module):
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
         # input = 32x32x3
         self.first_conv = nn.Sequential(
@@ -172,6 +172,6 @@ class LeBigNet(nn.Module):
         x = self.fourth_conv(x)
         x = self.fifth_conv(x)
         x = self.sixth_conv(x)
-        x = nn.Flatten(x)
+        x = torch.flatten(x, 1)
         x = self.linear_relu_stack(x)
         return x

@@ -19,7 +19,7 @@ device = (
 )
 
 BATCH = 128
-EPOCHS = 30
+EPOCHS = 60
 
 train_loader = DataLoader(training_data, batch_size=BATCH, shuffle=True)
 test_loader = DataLoader(test_data,batch_size=BATCH, shuffle=False)
@@ -30,7 +30,7 @@ classes = ("plane", "car", "bird", "cat", "deer", "dog", "frog", "horse", "ship"
 print(f"Device: {device}")
 
 visualizer.show_images(train_loader)
-visualizer.projector(training_data)
+# visualizer.projector(training_data) nie dziala dla cifar10
 
 
 # model_gray = my_models.LeNetGray().to(device)
@@ -51,7 +51,9 @@ model_big = my_models.LeBigNet().to(device)
 models = [model_big]
 
 loss = nn.CrossEntropyLoss()
-optimizers = [optim.Adam(model.parameters()) for model in models]
+optimizers = [optim.SGD(model.parameters(), lr=0.01, momentum=0.9) for model in models]
+
+visualizer.graph(model_big, device)
 
 for indx, model in enumerate(models):
     print(f"Model: {print(model)}\n\n")
@@ -67,7 +69,7 @@ for indx, model in enumerate(models):
 # torch.save(model_smaller.state_dict(), "./models/model_smaller.pth")
 # torch.save(model_lenet.state_dict(), "./models/model_lenet.pth")
 
-torch.save(model_big.state_dict(), "./models/model_big.pth")
+torch.save(model_big.state_dict(), "./models/model_big_SGD.pth")
 
 
 
